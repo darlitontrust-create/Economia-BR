@@ -7,14 +7,12 @@ Os dados vêm do **Sistema Gerenciador de Séries Temporais (SGS) do Banco Centr
 
 ## Como funciona a atualização
 
-1. **Ao abrir o link**, o painel busca os dados mais recentes direto na API do Banco Central.
-   - Durante a busca aparece o aviso *"Atualizando dados do Banco Central…"* no canto inferior direito.
-   - Quando termina, aparece *"Dados atualizados em DD/MM/AAAA às HH:MM"*.
-   - O selo **Última atualização** da capa mostra essa mesma data e hora.
-2. **Se a busca on-line falhar** (API fora do ar ou bloqueio do navegador), o painel usa a
-   cópia salva na pasta `data/` e avisa em amarelo, com a data dessa cópia.
-3. **Todo dia**, uma rotina do GitHub (`.github/workflows/atualizar-dados.yml`) baixa as séries
-   e renova a cópia em `data/`. Assim a reserva nunca fica muito antiga.
+1. **A cada 3 horas**, uma rotina do GitHub (`.github/workflows/atualizar-dados.yml`) baixa as séries
+   do Banco Central e grava a cópia em `data/`.
+2. **Ao abrir o link**, o painel carrega essa cópia na hora e tenta também buscar direto no Banco Central.
+   Se a busca direta funcionar, troca pelos dados mais novos; se o navegador bloquear, fica com a cópia.
+3. Ao terminar, aparece o aviso verde *"Dados atualizados em DD/MM/AAAA às HH:MM"*, e o selo
+   **Última atualização** da capa mostra essa mesma data e hora.
 
 O botão **⟳ Atualizar dados**, no menu lateral, refaz a busca a qualquer momento.
 

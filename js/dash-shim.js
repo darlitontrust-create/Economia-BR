@@ -125,33 +125,36 @@
   }
 
   let rodando = false;
+  function aplicarDados(novos) {
+    Object.assign(RAW, novos);
+    cache = {};
+    status = 'ok';
+    montarAnos();
+    runAll();
+    if (window.IEnav) window.IEnav.aplicar();
+  }
+  const quando = () => {
+    const a = RAW.atualizacao && RAW.atualizacao[0];
+    return a ? `${IE.fmtRef(a.data)} às ${a.hora}` : '';
+  };
+  // 1) mostra na hora a cópia salva (renovada pela rotina do GitHub);
+  // 2) tenta buscar ao vivo no Banco Central e, se conseguir, troca pelos dados novos.
   async function atualizar() {
     if (rodando) return;
     rodando = true;
     const btn = document.getElementById('k-refresh');
     if (btn) btn.disabled = true;
-    aviso('info', 'Atualizando dados do Banco Central…', true);
-    let novos, aoVivo = true, erro = null;
-    try { novos = await buscarAoVivo(); } catch (e) { erro = e; aoVivo = false; }
-    if (!aoVivo) {
-      try { novos = await lerCopiaSalva(); } catch (e) { novos = null; }
-    }
-    if (novos) {
-      Object.assign(RAW, novos);
-      cache = {};
-      status = 'ok';
-      montarAnos();
-      runAll();
-      if (window.IEnav) window.IEnav.aplicar();
-      const a = RAW.atualizacao && RAW.atualizacao[0];
-      const quando = a ? `${IE.fmtRef(a.data)} às ${a.hora}` : '';
-      if (aoVivo) aviso('ok', `Dados atualizados em ${quando}`);
-      else aviso('warn', `Não foi possível buscar on-line agora. Exibindo a cópia salva de ${quando}.`);
-      if (erro) console.warn('Busca on-line falhou:', erro);
-    } else {
-      status = 'error';
-      runAll();
-      aviso('erro', 'Não foi possível carregar os dados. Tente novamente em instantes.', true);
+    aviso('info', 'Atualizando dados…', true);
+    let temCopia = false;
+    try { aplicarDados(await lerCopiaSalva()); temCopia = true; } catch (e) { console.warn('Cópia salva indisponível:', e); }
+    if (temCopia) aviso('info', `Dados de ${quando()} carregados. Buscando novidades no Banco Central…`, true);
+    try {
+      aplicarDados(await buscarAoVivo());
+      aviso('ok', `Dados atualizados em ${quando()}`);
+    } catch (e) {
+      console.warn('Busca direta no Banco Central indisponível:', e);
+      if (temCopia) aviso('ok', `Dados atualizados em ${quando()}`);
+      else { status = 'error'; runAll(); aviso('erro', 'Não foi possível carregar os dados. Tente novamente em instantes.', true); }
     }
     if (btn) btn.disabled = false;
     rodando = false;

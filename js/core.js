@@ -186,7 +186,9 @@ window.IE = (() => {
     let lo = d3.min(P, (p) => p.y), hi = d3.max(P, (p) => p.y);
     if (hi - lo < 1e-9) { lo -= 1; hi += 1; }
     const pad = (hi - lo) * 0.12;
-    const y = d3.scaleLinear().domain([lo - pad * 3, hi + pad]).range([H - mb, mt + (alterna ? 40 : 24)]);
+    // Série só com valores positivos: eixo começa no zero
+    const base0 = d3.min(P, (p) => p.y) >= 0 ? 0 : lo - pad * 3;
+    const y = d3.scaleLinear().domain([base0, hi + pad]).range([H - mb, mt + (alterna ? 40 : 24)]);
     const id = 'kgrad' + (++gid);
     const grad = svg.append('defs').append('linearGradient').attr('id', id).attr('x1', 0).attr('y1', 0).attr('x2', 0).attr('y2', 1);
     grad.append('stop').attr('offset', 0).attr('stop-color', '#5fb98f').attr('stop-opacity', 0.45);
