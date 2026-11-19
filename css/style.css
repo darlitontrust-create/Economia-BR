@@ -148,3 +148,10 @@ a.k-tile:hover{filter:brightness(1.04)}
 .k-toast-erro{background:#8b2f15}.k-toast-erro .k-toast-ico{background:#f3b9a6}
 @keyframes kspin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.k-toast-info .k-toast-ico{animation:none}}
+.k-full{margin-top:0}
+.k-full svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.k-full .k-full-out{display:none}
+.k-full.k-ativo .k-full-in{display:none}
+.k-full.k-ativo .k-full-out{display:inline}
+.k-full.k-ativo{background:#5c5c5c;border-color:#777}
+.k-full[hidden]{display:none}

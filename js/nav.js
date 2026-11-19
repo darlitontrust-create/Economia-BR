@@ -89,6 +89,26 @@
   document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') fecharTodos(); });
   window.addEventListener('beforeprint', () => document.querySelectorAll('.k-page').forEach((s) => { s.hidden = false; }));
   window.addEventListener('afterprint', () => mostrar(atual, false));
+  // Tela cheia: o botão alterna entre ampliar e voltar
+  const btnFull = document.getElementById('k-full');
+  if (btnFull) {
+    const docEl = document.documentElement;
+    const emTelaCheia = () => document.fullscreenElement || document.webkitFullscreenElement;
+    const suporta = docEl.requestFullscreen || docEl.webkitRequestFullscreen;
+    if (!suporta) btnFull.hidden = true;
+    const atualizarBotao = () => {
+      const on = !!emTelaCheia();
+      btnFull.classList.toggle('k-ativo', on);
+      btnFull.querySelector('.k-full-txt').textContent = on ? 'Sair da tela cheia' : 'Tela cheia';
+      btnFull.title = on ? 'Voltar ao tamanho normal' : 'Ver o painel em tela cheia';
+    };
+    btnFull.addEventListener('click', () => {
+      if (emTelaCheia()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else (docEl.requestFullscreen || docEl.webkitRequestFullscreen).call(docEl);
+    });
+    document.addEventListener('fullscreenchange', atualizarBotao);
+    document.addEventListener('webkitfullscreenchange', atualizarBotao);
+  }
   window.IEnav = {aplicar};
   sincronizar();
   const h = (location.hash || '').replace('#', '');
