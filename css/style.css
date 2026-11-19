@@ -148,3 +148,13 @@ a.k-tile:hover{filter:brightness(1.04)}
 .k-toast-erro{background:#8b2f15}.k-toast-erro .k-toast-ico{background:#f3b9a6}
 @keyframes kspin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.k-toast-info .k-toast-ico{animation:none}}
+.k-src{list-style:none;margin:8px 0 10px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:6px 18px}
+.k-src li{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--k-line);border-radius:10px;padding:6px 10px;color:#333}
+.k-src li span:first-child{flex:1}
+.k-src-cod{font-size:11px;color:#777;white-space:nowrap}
+.k-src-link,.k-src-geral{display:inline-flex;align-items:center;justify-content:center;color:#1d6b44;text-decoration:none}
+.k-src-link{width:28px;height:28px;border-radius:8px;border:1px solid var(--k-line);background:#f4f4f4}
+.k-src-link:hover{background:var(--k-bom-bg);border-color:var(--k-bom)}
+.k-src-geral{gap:6px;font-weight:700}
+.k-src-geral:hover{text-decoration:underline}
+.k-src-link svg,.k-src-geral svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
